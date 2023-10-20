@@ -23,10 +23,10 @@ session = data_dict['Session']
 
 timer_reset = False
 day_mode = True
-project_mode = False
-
+# project_mode = False
 
 # ----- Function to calculate total time worked for current day ----- #
+
 
 def day_calc():
     current_df = pandas.read_csv("data.csv")
@@ -43,21 +43,10 @@ def day_calc():
     for num in session_duration_list:
         if type(num) == str:
             new_num = num.split(':')
-            # new_num is a list containing 3 strings (h/m/s)
+            # new_num is a list containing 3 strings (h, m, s)
             hours.append(int(new_num[0]))
-            # total_hours = sum(hours)
-            # # Breaking this down into minutes just for testing?
-            # # Not sure that the following line is necessary, or even desired?
-            # # It breaks down already appended hours and adds them (for a second time?) as seconds.
-            # # Also, I used the divide operator...assuming I meant to use multiply
-            # # Commenting out for now
-            # minutes.append(total_hours / 60)
             minutes.append(int(new_num[1]))
             seconds.append(int(new_num[2]))
-    # Seconds will obviously total more than 60, so in the following lines seconds are (evenly) converted into minutes,
-    # and added to the total minutes. Remaining seconds (anything less than a full minute) are calculated,
-    # in order to be displayed separately.
-    # I guess I need to repeat this for minutes to hours?
     total_hours = sum(hours)
     total_min = sum(minutes)
     total_sec = sum(seconds)  # Will total more than 60
@@ -75,8 +64,6 @@ def day_calc():
     canvas.itemconfig(day_total_display, text=f"{int(total_hours)}h {int(remainder_min)}m {remainder_sec}s")
 
 
-# day_calc()
-
 timer_on = False
 on_time = ''
 off_time = ''
@@ -92,7 +79,7 @@ def start_stop():
     if current_date != last_logged_date:
         session[len(start_time_dict)] = 0
     else:
-        session[len(start_time_dict)] = session[len(start_time_dict) -1]
+        session[len(start_time_dict)] = session[len(start_time_dict) - 1]
     global timer_on, on_time, off_time
     if not timer_on:
         timer_on = True
@@ -112,15 +99,11 @@ def start_stop():
         time_elapsed = off_time - on_time
         total[len(start_time_dict)] = time_elapsed
         action[len(start_time_dict)] = 'Stop'
-        # day_calc()
-    # print(timer_on)
     day_dict[len(start_time_dict)] = current_date
     start_time_dict[len(start_time_dict)] = current_time
     new_df = pandas.DataFrame.from_dict(data_dict)
     new_df.to_csv("data.csv", index=False)
     day_calc()
-
-# start_stop()
 
 
 # ----- Reset Timer ------ #
@@ -132,17 +115,19 @@ def reset():
         canvas.itemconfig(day_total_display, text='0h 0m 0s')
 
 
-def mode(selection):
-    print(selection)
-    global day_mode, project_mode
-    if selection == 'day':
+# ----- Set Mode ----------#
+def mode(select):
+    global day_mode
+    print(select)
+    if select == "day":
         day_mode = True
-        project_mode = False
+        # project_mode = False
+        print(f"Day mode is on")
     else:
-        project_mode = True
+        # project_mode = True
         day_mode = False
+        print(f"Project mode is on")
 
-# reset()
 
 # --------UI-----------
 
@@ -175,13 +160,6 @@ day_total_display = canvas.create_text(600, 320, text='0h 0m 0s', font=("Ariel",
 
 canvas.grid(column=0, row=0, columnspan=2)
 
-# timer_active = True
-# while timer_active:
-#     if project_mode:
-#         project_text = canvas.create_text(100, 400, text="Project:", font=("Ariel", 20, "italic"), fill='white')
-#     else:
-#         pass
-
 
 start_btn = Button(text="START/STOP", font=("Ariel", 30, "bold"), highlightthickness=0, command=start_stop)
 start_btn.grid(column=0, row=0)
@@ -194,6 +172,16 @@ variable.set("day")
 
 mode_select = OptionMenu(window, variable, "day", "project", command=mode)
 mode_select.place(x=700, y=495)
+
+# if not day_mode:
+#     print("test")
+#     test_text = canvas.create_text(600, 495, text="Test:", font=("Ariel", 15, "italic"), fill='black')
+#
+#     var = StringVar(window)
+#     var.set("--")
+#
+#     project_select = OptionMenu(window, var, "proj1", "proj2")
+#     project_select.place(x=600, y=495)
 
 
 window.mainloop()
