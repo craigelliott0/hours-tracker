@@ -1,4 +1,4 @@
-# hours-tracker
+# Take Ur Time
 
 An app for tracking hours worked within a day. 
 
