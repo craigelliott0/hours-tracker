@@ -23,7 +23,6 @@ session = data_dict['Session']
 
 timer_reset = False
 day_mode = True
-# project_mode = False
 
 # ----- Function to calculate total time worked for current day ----- #
 
@@ -115,37 +114,11 @@ def reset():
         canvas.itemconfig(day_total_display, text='0h 0m 0s')
 
 
-# ----- Set Mode ----------#
-def mode(select):
-    global day_mode
-    print(select)
-    if select == "day":
-        day_mode = True
-        # project_mode = False
-        print(f"Day mode is on")
-    else:
-        # project_mode = True
-        day_mode = False
-        print(f"Project mode is on")
-
-
 # --------UI-----------
 
 window = Tk()
 window.title("Hours Tracker")
 window.config(padx=10, pady=10, bg="white")
-
-# notebook = ttk.Notebook(window)
-# notebook.grid(column=0, row=0, pady=15)
-
-# frame1 = Frame(notebook)
-# frame2 = Frame(notebook)
-#
-# frame1.grid(column=0, row=0)
-# frame2.grid(column=0, row=0)
-#
-# notebook.add(frame1, text='Timer')
-# notebook.add(frame2, text='History')
 
 bg_image = PhotoImage(file="hours_tracker_img.png")
 
@@ -155,7 +128,6 @@ canvas.create_image(400, 263, image=bg_image)
 time_display = canvas.create_text(400, 145, text='00:00:00', font=("Ariel", 30, "bold"), fill='white')
 status_display = canvas.create_text(300, 100, text='', font=("Ariel", 20, "italic"), fill='white')
 day_total_text = canvas.create_text(580, 290, text="Today's total", font=("Ariel", 20, "italic"), fill='white')
-mode_text = canvas.create_text(668, 505, text="Mode:", font=("Ariel", 15, "italic"), fill='black')
 day_total_display = canvas.create_text(600, 320, text='0h 0m 0s', font=("Ariel", 20, "bold"), fill='white')
 
 canvas.grid(column=0, row=0, columnspan=2)
@@ -169,19 +141,5 @@ reset_btn.place(x=300, y=300)
 
 variable = StringVar(window)
 variable.set("day")
-
-mode_select = OptionMenu(window, variable, "day", "project", command=mode)
-mode_select.place(x=700, y=495)
-
-# if not day_mode:
-#     print("test")
-#     test_text = canvas.create_text(600, 495, text="Test:", font=("Ariel", 15, "italic"), fill='black')
-#
-#     var = StringVar(window)
-#     var.set("--")
-#
-#     project_select = OptionMenu(window, var, "proj1", "proj2")
-#     project_select.place(x=600, y=495)
-
 
 window.mainloop()
